@@ -1,0 +1,1241 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Cost Report - Cost Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px 30px;
+        }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        /* Top Section: Project Info (Left) + Metrics & Financial (Right) */
+        .top-section {
+            display: grid;
+            grid-template-columns: 500px 1fr;
+            gap: 30px;
+            padding: 30px;
+            background: #f8f9fc;
+        }
+        /* Left: General Project Information */
+        .project-info-section {
+            display: flex;
+            flex-direction: column;
+        }
+        .section-title-inline {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3a8a;
+            padding: 16px 20px;
+            border-bottom: 3px solid #3b82f6;
+            background: linear-gradient(to right, #eff6ff, transparent);
+            margin-bottom: 15px;
+        }
+        .project-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 18px;
+        }
+        .project-info-table th {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 14px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        .project-info-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .project-info-table tr:last-child td {
+            border-bottom: none;
+        }
+        .project-info-table td:first-child {
+            font-weight: 600;
+            color: #1e3a8a;
+            font-size: 16px;
+            width: 250px;
+        }
+        .project-info-table td:nth-child(2) {
+            color: #374151;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        /* Right: Key Metrics + Financial Summary + Health */
+        .metrics-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Layout: Key Metrics (Left) + Financial Summary (Right) */
+        .metrics-financial-container {
+            display: grid;
+            grid-template-columns: 500px 1fr;
+            gap: 20px;
+        }
+        
+        /* Key Metrics - 2x2 Grid - Full Height */
+        .metrics-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            flex: 1;
+        }
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px 18px;
+            border: 2px solid;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .metric-card.revenue { border-color: #10b981; }
+        .metric-card.actual-revenue { border-color: #3b82f6; }
+        .metric-card.actual { border-color: #8b5cf6; }
+        .metric-card.committed { border-color: #f59e0b; }
+        .metric-label {
+            font-size: 13px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+        }
+        .metric-subtitle {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+        
+        /* Financial Summary Table */
+        .financial-summary-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 18px;
+        }
+        .financial-summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .financial-table thead {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+        .financial-table th {
+            padding: 9px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        .financial-table td {
+            padding: 7px 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .financial-table tr:last-child td {
+            border-bottom: none;
+        }
+        .financial-table td:first-child {
+            font-weight: 600;
+            color: #1e3a8a;
+            font-size: 12px;
+        }
+        .financial-table td:nth-child(2),
+        .financial-table td:nth-child(3) {
+            text-align: right;
+            font-size: 12px;
+        }
+        .financial-table tr.subtotal {
+            background: #f3f4f6;
+            font-weight: 600;
+        }
+        .financial-table tr.total-highlight {
+            background: #dbeafe;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .financial-table tr.indent-1 td:first-child {
+            padding-left: 28px;
+            font-weight: 500;
+            font-size: 11px;
+        }
+        
+        /* Project Health Dashboard - Full Width Under Metrics */
+        .health-section {
+            margin-top: 0;
+            padding: 18px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        .health-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .health-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+            border-radius: 8px;
+            padding: 18px 16px;
+            border: 2px solid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .health-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .health-card.good { border-color: #10b981; }
+        .health-card.warning { border-color: #f59e0b; }
+        .health-card.critical { border-color: #ef4444; }
+        .health-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 26px;
+        }
+        .health-card.good .health-icon {
+            background: #d1fae5;
+            color: #10b981;
+        }
+        .health-card.warning .health-icon {
+            background: #fef3c7;
+            color: #f59e0b;
+        }
+        .health-card.critical .health-icon {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+        .health-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .health-status {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .health-card.good .health-status { color: #10b981; }
+        .health-card.warning .health-status { color: #f59e0b; }
+        .health-card.critical .health-status { color: #ef4444; }
+        .health-detail {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        /* Alert Banner */
+        .alert-banner {
+            margin-top: 18px;
+            padding: 16px 18px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .alert-icon {
+            font-size: 28px;
+            color: #f59e0b;
+            flex-shrink: 0;
+        }
+        .alert-content {
+            flex: 1;
+        }
+        .alert-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 5px;
+        }
+        .alert-message {
+            font-size: 14px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        /* Budget vs Actual Analysis Section - 2 Columns */
+        .charts-section {
+            padding: 30px;
+            background: white;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e3a8a;
+            padding: 18px 0;
+            border-bottom: 3px solid #3b82f6;
+            background: linear-gradient(to right, #eff6ff, transparent);
+            margin-bottom: 25px;
+        }
+        .charts-content {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+        }
+        /* Left: 9 Charts in 3x3 Grid */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+        .chart-card {
+            background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 100%);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+        }
+        .chart-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 6px;
+            text-align: center;
+            width: 100%;
+        }
+        .chart-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 14px;
+            width: 100%;
+        }
+        .chart-canvas-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        .donut-chart {
+            display: block;
+        }
+        .chart-stats {
+            text-align: center;
+            margin-top: 14px;
+            width: 100%;
+        }
+        .chart-stats-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .chart-stats-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        /* Right: Summary Cards in 1x4 Grid */
+        .chart-summary-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 22px;
+        }
+        .summary-metric-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 28px 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .summary-metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        .summary-metric-label {
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+        .summary-metric-value {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        .summary-metric-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+            background: #f8f9fc;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table.data-table thead {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+        table.data-table th {
+            padding: 14px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        table.data-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+        table.data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+        table.data-table tbody tr.total-row {
+            background: #dbeafe;
+            font-weight: 700;
+            border-top: 3px solid #3b82f6;
+            font-size: 14px;
+        }
+        table.data-table tbody tr.adjustment-row {
+            background: #fef3c7;
+            font-style: italic;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .positive {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .negative {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1400px) {
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+            .metrics-financial-container {
+                grid-template-columns: 1fr;
+            }
+            .charts-content {
+                grid-template-columns: 1fr;
+            }
+            .chart-summary-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .health-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            .charts-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .chart-summary-section {
+                grid-template-columns: 1fr;
+            }
+            .health-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Project Cost Report (Cost Report Page)
+            </h1>
+        </div>
+        <!-- Top Section: Project Info (Left) + Metrics & Financial (Right) -->
+        <div class="top-section">
+            <!-- Left: General Project Information -->
+            <div class="project-info-section">
+                <div class="section-title-inline">📋 General Project Information</div>
+                <table class="project-info-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Project Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Stage Gate: (If any)</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>Project No:</td>
+                            <td>MSS/25001</td>
+                        </tr>
+                        <tr>
+                            <td>Project Name:</td>
+                            <td>Cost Management System</td>
+                        </tr>
+                        <tr>
+                            <td>Project Manager:</td>
+                            <td>Dickson</td>
+                        </tr>
+                        <tr>
+                            <td>Client:</td>
+                            <td>Mermaid</td>
+                        </tr>
+                        <tr>
+                            <td>Project Type: (If any)</td>
+                            <td>EPCI</td>
+                        </tr>
+                        <tr>
+                            <td>Total Revenue:</td>
+                            <td>$ 500,000</td>
+                        </tr>
+                        <tr>
+                            <td>Approval Budget (BAC):</td>
+                            <td>$ 332,000</td>
+                        </tr>
+                        <tr>
+                            <td>Project Estimate at Completion (EAC):</td>
+                            <td>$ 332,000</td>
+                        </tr>
+                        <tr>
+                            <td>Period:</td>
+                            <td>30-Dec-25</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Right: Key Metrics + Financial Summary + Health (Below) -->
+            <div class="metrics-section">
+                <!-- Layout: Metrics (Left) + Financial Summary (Right) -->
+                <div class="metrics-financial-container">
+                    <!-- Left: Key Performance Metrics - 2x2 Grid - Full Height -->
+                    <div class="metrics-wrapper">
+                        <div class="section-title-inline">💼 Key Performance Metrics</div>
+                        <div class="metrics-grid">
+                            <div class="metric-card revenue">
+                                <div class="metric-label">Revenue</div>
+                                <div class="metric-value">$500K</div>
+                                <div class="metric-subtitle">Total Revenue</div>
+                            </div>
+                            <div class="metric-card actual-revenue">
+                                <div class="metric-label">Actual Revenue</div>
+                                <div class="metric-value">$100K</div>
+                                <div class="metric-subtitle">Revenue to Date</div>
+                            </div>
+                            <div class="metric-card actual">
+                                <div class="metric-label">Actual</div>
+                                <div class="metric-value">$50K</div>
+                                <div class="metric-subtitle">Cost to Date</div>
+                            </div>
+                            <div class="metric-card committed">
+                                <div class="metric-label">Committed</div>
+                                <div class="metric-value">$100K</div>
+                                <div class="metric-subtitle">Total Committed</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Financial Summary -->
+                    <div class="financial-summary-section">
+                        <div class="financial-summary-title">
+                            <span>📊</span>
+                            Financial Summary & Performance Metrics
+                        </div>
+                        <table class="financial-table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="text-right">Amount (USD)</th>
+                                    <th class="text-right">% of Revenue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>1. Budget (BAC)</strong></td>
+                                    <td class="text-right">$332,000</td>
+                                    <td class="text-right">66.4%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2. Actual</strong></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                </tr>
+                                <tr class="indent-1">
+                                    <td>2.1 Project Expenses</td>
+                                    <td class="text-right">$50,000</td>
+                                    <td class="text-right">50%</td>
+                                </tr>
+                                <tr class="indent-1">
+                                    <td>2.2 Vessel Expenses</td>
+                                    <td class="text-right">$3,137,718</td>
+                                    <td class="text-right">628%</td>
+                                </tr>
+                                <tr class="indent-1">
+                                    <td>2.3 Overhead</td>
+                                    <td class="text-right">$1,070,522</td>
+                                    <td class="text-right">214%</td>
+                                </tr>
+                                <tr class="subtotal">
+                                    <td>2.4 Total</td>
+                                    <td class="text-right">$4,258,240</td>
+                                    <td class="text-right">851.6%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3. EAC</strong></td>
+                                    <td class="text-right">$332,000</td>
+                                    <td class="text-right">66.4%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>4. EAC Variance</strong></td>
+                                    <td class="text-right positive">$20,000</td>
+                                    <td class="text-right positive">4.0%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>5. Margin BAC</strong></td>
+                                    <td class="text-right">$168,000</td>
+                                    <td class="text-right">33.6%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6. Margin EAC</strong></td>
+                                    <td class="text-right">$168,000</td>
+                                    <td class="text-right">33.6%</td>
+                                </tr>
+                                <tr class="total-highlight">
+                                    <td><strong>7. EV (Earned Value)</strong></td>
+                                    <td class="text-right">$75,000</td>
+                                    <td class="text-right">22.6%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Project Health Dashboard - Full Width Below -->
+                <div class="health-section">
+                    <div class="health-title">
+                        <span>🏥</span>
+                        Project Health & Cost Alerts
+                    </div>
+                    <div class="health-grid">
+                        <div class="health-card good">
+                            <div class="health-icon">✓</div>
+                            <div class="health-label">Budget Status</div>
+                            <div class="health-status">Healthy</div>
+                            <div class="health-detail">48% Used</div>
+                        </div>
+                        <div class="health-card warning">
+                            <div class="health-icon">⚠</div>
+                            <div class="health-label">CPI</div>
+                            <div class="health-status">Warning</div>
+                            <div class="health-detail">CPI = 0.67</div>
+                        </div>
+                        <div class="health-card critical">
+                            <div class="health-icon">✕</div>
+                            <div class="health-label">Cost Variance</div>
+                            <div class="health-status">Critical</div>
+                            <div class="health-detail">+$10K Over</div>
+                        </div>
+                    </div>
+                    <!-- Alert Banner -->
+                    <div class="alert-banner">
+                        <div class="alert-icon">⚠️</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Alert: Mob/Demobilisation Over Budget</div>
+                            <div class="alert-message">
+                                Exceeds by $10,000 (110%). Action required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Budget vs Actual Analysis by Category - 2 Columns -->
+        <div class="charts-section">
+            <div class="section-title">📊 Budget vs Actual Analysis by Category</div>
+            <div class="charts-content">
+                <!-- Left: 9 Charts in 3x3 Grid -->
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <div class="chart-title">Subcontractor</div>
+                        <div class="chart-subtitle">Account: 5400110</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart1" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$80K / $20K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Mob / Demobilisation</div>
+                        <div class="chart-subtitle">Account: 5400120</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart2" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$80K / $20K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Charter Hire</div>
+                        <div class="chart-subtitle">Account: 5400130</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart3" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$0 / $50K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Consumables</div>
+                        <div class="chart-subtitle">Account: 5400140</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart4" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$0 / $50K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Recharged</div>
+                        <div class="chart-subtitle">Account: 5400150</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart5" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$0 / $10K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Other Project Cost</div>
+                        <div class="chart-subtitle">Account: 5400160</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart6" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$0 / $10K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Catering & Bunks</div>
+                        <div class="chart-subtitle">Account: 5400170</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart7" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$0 / $10K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Port Due</div>
+                        <div class="chart-subtitle">Account: 5400180</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart8" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$0 / $1K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Freight Expenses</div>
+                        <div class="chart-subtitle">Account: 5400190</div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart9" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$0 / $1K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right: Summary Cards in 1x4 Grid -->
+                <div class="chart-summary-section">
+                    <div class="summary-metric-card">
+                        <div class="summary-metric-label">Total Budget</div>
+                        <div class="summary-metric-value">$332,000</div>
+                        <div class="summary-metric-subtitle">Approved Budget (BAC)</div>
+                    </div>
+                    <div class="summary-metric-card">
+                        <div class="summary-metric-label">Total Consumed</div>
+                        <div class="summary-metric-value">$150,000</div>
+                        <div class="summary-metric-subtitle">Committed + Actual Paid</div>
+                    </div>
+                    <div class="summary-metric-card">
+                        <div class="summary-metric-label">Total Available</div>
+                        <div class="summary-metric-value">$172,000</div>
+                        <div class="summary-metric-subtitle">Remaining Budget</div>
+                    </div>
+                    <div class="summary-metric-card">
+                        <div class="summary-metric-label">Budget Usage</div>
+                        <div class="summary-metric-value">48%</div>
+                        <div class="summary-metric-subtitle">Overall Utilization</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Project Expenses Table -->
+        <div class="section-title" style="margin: 0; padding: 20px 30px 15px;">💰 Project Expenses Breakdown (ACWP, AC)</div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Account Code</th>
+                        <th>CBS Group</th>
+                        <th class="text-center">% Org</th>
+                        <th class="text-right">O_BAC<br>Original Budget<br>(A) USD</th>
+                        <th class="text-center">% Cur</th>
+                        <th class="text-right">BAC<br>Current Budget<br>(B) USD</th>
+                        <th class="text-right">Committed<br>(C) USD</th>
+                        <th class="text-right">ACWP/AC<br>Actual Paid<br>(D) USD</th>
+                        <th class="text-right">Committed +<br>Actual Paid<br>(E)=(C)+(D) USD</th>
+                        <th class="text-right">Available<br>(F)=(B)-(E) USD</th>
+                        <th class="text-center">% Ava</th>
+                        <th class="text-right">ETC USD</th>
+                        <th class="text-right">EAC<br>(H)=(E)+(G) USD</th>
+                        <th class="text-center">% Use</th>
+                        <th class="text-right">VAC Balance<br>(I)=(B)-(G) USD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5400110</td>
+                        <td>Subcontractor</td>
+                        <td class="text-center">30%</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-center">30%</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-right">$30,000</td>
+                        <td class="text-right">$80,000</td>
+                        <td class="text-right">$20,000</td>
+                        <td class="text-center">20%</td>
+                        <td class="text-right">$20,000</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr>
+                        <td>5400120</td>
+                        <td>Mob / Demobilisation</td>
+                        <td class="text-center">30%</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-center">30%</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-right">$30,000</td>
+                        <td class="text-right">$80,000</td>
+                        <td class="text-right">$20,000</td>
+                        <td class="text-center">20%</td>
+                        <td class="text-right">$20,000</td>
+                        <td class="text-right">$110,000</td>
+                        <td class="text-center">110%</td>
+                        <td class="text-right negative">($10,000)</td>
+                    </tr>
+                    <tr>
+                        <td>5400130</td>
+                        <td>Charter Hire</td>
+                        <td class="text-center">15%</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-center">15%</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr>
+                        <td>5400140</td>
+                        <td>Consumables (Owned Cost)</td>
+                        <td class="text-center">15%</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-center">15%</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr>
+                        <td>5400150</td>
+                        <td>Recharged / Cost Plus</td>
+                        <td class="text-center">3%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">3%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr>
+                        <td>5400160</td>
+                        <td>Other Project Cost</td>
+                        <td class="text-center">3%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">3%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr>
+                        <td>5400170</td>
+                        <td>Catering & Bunks</td>
+                        <td class="text-center">3%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">3%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-right">$10,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr>
+                        <td>5400180</td>
+                        <td>Port Due</td>
+                        <td class="text-center">0%</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-center">0%</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr>
+                        <td>5400190</td>
+                        <td>Freight Expenses</td>
+                        <td class="text-center">0%</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-center">0%</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-right">$1,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                    <tr class="adjustment-row">
+                        <td>-</td>
+                        <td>Adjustment</td>
+                        <td class="text-center">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-center">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right negative">($10,000)</td>
+                        <td class="text-right negative">($10,000)</td>
+                        <td class="text-right">-</td>
+                        <td class="text-center">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right negative">($10,000)</td>
+                        <td class="text-center">-</td>
+                        <td class="text-right positive">$10,000</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">Grand Total Project Expenses</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$332,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$332,000</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-right">$50,000</td>
+                        <td class="text-right">$150,000</td>
+                        <td class="text-right">$172,000</td>
+                        <td class="text-center">52%</td>
+                        <td class="text-right">$182,000</td>
+                        <td class="text-right">$332,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Revenue Table -->
+        <div class="section-title" style="margin: 0; padding: 20px 30px 15px;">💵 Project Revenue</div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Account Code</th>
+                        <th>CBS Group</th>
+                        <th class="text-center">% Org</th>
+                        <th class="text-right">Original Budget (A)<br>USD</th>
+                        <th class="text-center">% Cur</th>
+                        <th class="text-right">Current Budget (B)<br>USD</th>
+                        <th class="text-right">Actual Received (C)<br>USD</th>
+                        <th class="text-center">% Received</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>4200110</td>
+                        <td>Service Income - External</td>
+                        <td class="text-center">60%</td>
+                        <td class="text-right">$300,000</td>
+                        <td class="text-center">60%</td>
+                        <td class="text-right">$300,000</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-center">33%</td>
+                    </tr>
+                    <tr>
+                        <td>4900130</td>
+                        <td>Service Income – Internal</td>
+                        <td class="text-center">40%</td>
+                        <td class="text-right">$200,000</td>
+                        <td class="text-center">40%</td>
+                        <td class="text-right">$200,000</td>
+                        <td class="text-right">-</td>
+                        <td class="text-center">0%</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">Grand Total Project Revenue</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$500,000</td>
+                        <td class="text-center">100%</td>
+                        <td class="text-right">$500,000</td>
+                        <td class="text-right">$100,000</td>
+                        <td class="text-center positive">20%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        // Chart data for 9 categories
+        const chartData = [
+            { id: 'chart1', consumed: 80, color: '#3b82f6' },
+            { id: 'chart2', consumed: 80, color: '#10b981' },
+            { id: 'chart3', consumed: 0, color: '#ef4444' },
+            { id: 'chart4', consumed: 0, color: '#f59e0b' },
+            { id: 'chart5', consumed: 0, color: '#8b5cf6' },
+            { id: 'chart6', consumed: 0, color: '#06b6d4' },
+            { id: 'chart7', consumed: 0, color: '#14b8a6' },
+            { id: 'chart8', consumed: 0, color: '#ec4899' },
+            { id: 'chart9', consumed: 0, color: '#6b7280' }
+        ];
+        function drawDonutChart(canvasId, consumedPercent, consumedColor) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = 120;
+            canvas.height = 120;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 45;
+            const lineWidth = 20;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Background circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.stroke();
+            // Consumed arc
+            if (consumedPercent > 0) {
+                const consumedAngle = (consumedPercent / 100) * 2 * Math.PI;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + consumedAngle);
+                ctx.strokeStyle = consumedColor;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+            // Center text
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(consumedPercent + '%', centerX, centerY - 7);
+            ctx.font = '11px Arial';
+            ctx.fillStyle = '#6b7280';
+            ctx.fillText('Used', centerX, centerY + 10);
+        }
+        function initAllCharts() {
+            chartData.forEach(chart => {
+                drawDonutChart(chart.id, chart.consumed, chart.color);
+            });
+        }
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(initAllCharts, 250);
+        });
+        window.addEventListener('load', initAllCharts);
+    </script>
+</body>
+</html>
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    
