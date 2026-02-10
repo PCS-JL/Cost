@@ -264,28 +264,6 @@
         .health-card.good { border-color: #10b981; }
         .health-card.warning { border-color: #f59e0b; }
         .health-card.critical { border-color: #ef4444; }
-        .health-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            font-size: 26px;
-        }
-        .health-card.good .health-icon {
-            background: #d1fae5;
-            color: #10b981;
-        }
-        .health-card.warning .health-icon {
-            background: #fef3c7;
-            color: #f59e0b;
-        }
-        .health-card.critical .health-icon {
-            background: #fee2e2;
-            color: #ef4444;
-        }
         .health-label {
             font-size: 13px;
             font-weight: 600;
@@ -355,7 +333,7 @@
             grid-template-columns: 1fr 380px;
             gap: 30px;
         }
-        /* Left: 9 Charts in 3x3 Grid */
+        /* Left: 11 Charts in Grid */
         .charts-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -372,6 +350,7 @@
             align-items: center;
             justify-content: center;
             border: 1px solid #e5e7eb;
+            position: relative;
         }
         .chart-card:hover {
             transform: translateY(-3px);
@@ -397,6 +376,8 @@
             justify-content: center;
             align-items: center;
             width: 100%;
+            position: relative;
+            cursor: pointer;
         }
         .donut-chart {
             display: block;
@@ -416,6 +397,54 @@
             color: #6b7280;
             margin-top: 4px;
         }
+        
+        /* Tooltip Popup */
+        .chart-tooltip {
+            position: absolute;
+            background: white;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            min-width: 180px;
+        }
+        .chart-tooltip.show {
+            opacity: 1;
+        }
+        .tooltip-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 6px;
+        }
+        .tooltip-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+        .tooltip-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tooltip-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        .tooltip-value {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        
         /* Right: Summary Cards in 1x4 Grid */
         .chart-summary-section {
             display: grid;
@@ -513,6 +542,18 @@
         .negative {
             color: #ef4444;
             font-weight: 600;
+        }
+        .cpi-good {
+            color: #10b981;
+            font-weight: 700;
+        }
+        .cpi-warning {
+            color: #f59e0b;
+            font-weight: 700;
+        }
+        .cpi-critical {
+            color: #ef4444;
+            font-weight: 700;
         }
         
         @media (max-width: 1400px) {
@@ -641,7 +682,7 @@
                             <div class="metric-card committed">
                                 <div class="metric-label">Committed</div>
                                 <div class="metric-value">$100K</div>
-                                <div class="metric-subtitle">Total Committed</div>
+                                <div class="metric-subtitle">Committed Cost</div>
                             </div>
                         </div>
                     </div>
@@ -688,8 +729,8 @@
                                 </tr>
                                 <tr>
                                     <td><strong>3. EAC</strong></td>
-                                    <td class="text-right">$332,000</td>
-                                    <td class="text-right">66.4%</td>
+                                    <td class="text-right">$312,000</td>
+                                    <td class="text-right">62.4%</td>
                                 </tr>
                                 <tr>
                                     <td><strong>4. EAC Variance</strong></td>
@@ -724,22 +765,19 @@
                     </div>
                     <div class="health-grid">
                         <div class="health-card good">
-                            <div class="health-icon">✓</div>
-                            <div class="health-label">Budget Status</div>
-                            <div class="health-status">Healthy</div>
-                            <div class="health-detail">48% Used</div>
+                            <div class="health-label">Spending Status</div>
+                            <div class="health-status">48%</div>
+                            <div class="health-detail">Actual + Committed</div>
                         </div>
                         <div class="health-card warning">
-                            <div class="health-icon">⚠</div>
                             <div class="health-label">CPI</div>
                             <div class="health-status">Warning</div>
                             <div class="health-detail">CPI = 0.96</div>
                         </div>
                         <div class="health-card critical">
-                            <div class="health-icon">✕</div>
                             <div class="health-label">Cost Variance</div>
                             <div class="health-status">Critical</div>
-                            <div class="health-detail">+$10K Over</div>
+                            <div class="health-detail">-$10K Over</div>
                         </div>
                     </div>
                     <!-- Alert Banner -->
@@ -759,12 +797,12 @@
         <div class="charts-section">
             <div class="section-title">📊 Budget vs Actual Analysis by Category</div>
             <div class="charts-content">
-                <!-- Left: 9 Charts in 3x3 Grid -->
+                <!-- Left: 11 Charts in Grid -->
                 <div class="charts-container">
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-1">
                         <div class="chart-title">Subcontractor</div>
                         <div class="chart-subtitle">Account: 5400110</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="1">
                             <canvas id="chart1" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -772,10 +810,10 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-2">
                         <div class="chart-title">Mob / Demobilisation</div>
                         <div class="chart-subtitle">Account: 5400120</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="2">
                             <canvas id="chart2" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -783,10 +821,10 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-3">
                         <div class="chart-title">Charter Hire</div>
                         <div class="chart-subtitle">Account: 5400130</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="3">
                             <canvas id="chart3" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -794,10 +832,10 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-4">
                         <div class="chart-title">Consumables</div>
                         <div class="chart-subtitle">Account: 5400140</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="4">
                             <canvas id="chart4" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -805,10 +843,10 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-5">
                         <div class="chart-title">Recharged</div>
                         <div class="chart-subtitle">Account: 5400150</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="5">
                             <canvas id="chart5" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -816,10 +854,10 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-6">
                         <div class="chart-title">Other Project Cost</div>
                         <div class="chart-subtitle">Account: 5400160</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="6">
                             <canvas id="chart6" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -827,10 +865,10 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-7">
                         <div class="chart-title">Catering & Bunks</div>
                         <div class="chart-subtitle">Account: 5400170</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="7">
                             <canvas id="chart7" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -838,10 +876,10 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-8">
                         <div class="chart-title">Port Due</div>
                         <div class="chart-subtitle">Account: 5400180</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="8">
                             <canvas id="chart8" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
@@ -849,14 +887,36 @@
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
-                    <div class="chart-card">
+                    <div class="chart-card" id="card-9">
                         <div class="chart-title">Freight Expenses</div>
                         <div class="chart-subtitle">Account: 5400190</div>
-                        <div class="chart-canvas-wrapper">
+                        <div class="chart-canvas-wrapper" data-chart="9">
                             <canvas id="chart9" class="donut-chart"></canvas>
                         </div>
                         <div class="chart-stats">
                             <div class="chart-stats-value">$0 / $1K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card" id="card-10">
+                        <div class="chart-title">Vessel</div>
+                        <div class="chart-subtitle">Vessel Expenses</div>
+                        <div class="chart-canvas-wrapper" data-chart="10">
+                            <canvas id="chart10" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$50K / $100K</div>
+                            <div class="chart-stats-label">Used / Available</div>
+                        </div>
+                    </div>
+                    <div class="chart-card" id="card-11">
+                        <div class="chart-title">Overhead</div>
+                        <div class="chart-subtitle">Overhead Costs</div>
+                        <div class="chart-canvas-wrapper" data-chart="11">
+                            <canvas id="chart11" class="donut-chart"></canvas>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stats-value">$50K / $50K</div>
                             <div class="chart-stats-label">Used / Available</div>
                         </div>
                     </div>
@@ -886,6 +946,33 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Tooltip Popup -->
+        <div id="chartTooltip" class="chart-tooltip">
+            <div class="tooltip-title" id="tooltipTitle">Budget Details</div>
+            <div class="tooltip-row">
+                <div class="tooltip-label">
+                    <div class="tooltip-color" style="background: #1e40af;"></div>
+                    <span>Actual:</span>
+                </div>
+                <div class="tooltip-value" id="tooltipActual">$0</div>
+            </div>
+            <div class="tooltip-row">
+                <div class="tooltip-label">
+                    <div class="tooltip-color" style="background: #60a5fa;"></div>
+                    <span>Committed:</span>
+                </div>
+                <div class="tooltip-value" id="tooltipCommitted">$0</div>
+            </div>
+            <div class="tooltip-row">
+                <div class="tooltip-label">
+                    <div class="tooltip-color" style="background: #9ca3af;"></div>
+                    <span>Available:</span>
+                </div>
+                <div class="tooltip-value" id="tooltipAvailable">$0</div>
+            </div>
+        </div>
+        
         <!-- Project Expenses Table -->
         <div class="section-title" style="margin: 0; padding: 20px 30px 15px;">💰 Project Expenses Breakdown (ACWP, AC)</div>
         <div class="table-container">
@@ -895,18 +982,19 @@
                         <th>Account Code</th>
                         <th>CBS Group</th>
                         <th class="text-center">% Org</th>
-                        <th class="text-right">O_BAC<br>Original Budget<br>(A) USD</th>
+                        <th class="text-right">Original Budget<br>(A)</th>
                         <th class="text-center">% Cur</th>
-                        <th class="text-right">BAC<br>Current Budget<br>(B) USD</th>
-                        <th class="text-right">Committed<br>(C) USD</th>
-                        <th class="text-right">ACWP/AC<br>Actual Paid<br>(D) USD</th>
-                        <th class="text-right">Committed +<br>Actual Paid<br>(E)=(C)+(D) USD</th>
-                        <th class="text-right">Available<br>(F)=(B)-(E) USD</th>
+                        <th class="text-right">Current Budget<br>(B)</th>
+                        <th class="text-right">Committed<br>(C)</th>
+                        <th class="text-right">Actual to Date<br>(D)</th>
+                        <th class="text-right">Committed + Actual<br>(E) = (C)+(D)</th>
+                        <th class="text-right">Available<br>(F)=(B)-(E)</th>
                         <th class="text-center">% Ava</th>
-                        <th class="text-right">ETC USD</th>
-                        <th class="text-right">EAC<br>(H)=(E)+(G) USD</th>
+                        <th class="text-right">ETC<br>(G)</th>
+                        <th class="text-right">EAC<br>(H)=(E)+(G)</th>
                         <th class="text-center">% Use</th>
-                        <th class="text-right">VAC Balance<br>(I)=(B)-(G) USD</th>
+                        <th class="text-center">CPI</th>
+                        <th class="text-right">Balance<br>(I)=(B)-(H)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -925,6 +1013,7 @@
                         <td class="text-right">$20,000</td>
                         <td class="text-right">$100,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr>
@@ -942,6 +1031,7 @@
                         <td class="text-right">$20,000</td>
                         <td class="text-right">$110,000</td>
                         <td class="text-center">110%</td>
+                        <td class="text-center cpi-critical">0.91</td>
                         <td class="text-right negative">($10,000)</td>
                     </tr>
                     <tr>
@@ -959,6 +1049,7 @@
                         <td class="text-right">$50,000</td>
                         <td class="text-right">$50,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr>
@@ -976,6 +1067,7 @@
                         <td class="text-right">$50,000</td>
                         <td class="text-right">$50,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr>
@@ -993,6 +1085,7 @@
                         <td class="text-right">$10,000</td>
                         <td class="text-right">$10,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr>
@@ -1010,6 +1103,7 @@
                         <td class="text-right">$10,000</td>
                         <td class="text-right">$10,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr>
@@ -1027,6 +1121,7 @@
                         <td class="text-right">$10,000</td>
                         <td class="text-right">$10,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr>
@@ -1044,6 +1139,7 @@
                         <td class="text-right">$1,000</td>
                         <td class="text-right">$1,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr>
@@ -1061,6 +1157,7 @@
                         <td class="text-right">$1,000</td>
                         <td class="text-right">$1,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-good">1.00</td>
                         <td class="text-right">-</td>
                     </tr>
                     <tr class="adjustment-row">
@@ -1078,6 +1175,7 @@
                         <td class="text-right">-</td>
                         <td class="text-right negative">($10,000)</td>
                         <td class="text-center">-</td>
+                        <td class="text-center">-</td>
                         <td class="text-right positive">$10,000</td>
                     </tr>
                     <tr class="total-row">
@@ -1094,6 +1192,7 @@
                         <td class="text-right">$182,000</td>
                         <td class="text-right">$332,000</td>
                         <td class="text-center">100%</td>
+                        <td class="text-center cpi-warning">0.96</td>
                         <td class="text-right">-</td>
                     </tr>
                 </tbody>
@@ -1108,10 +1207,10 @@
                         <th>Account Code</th>
                         <th>CBS Group</th>
                         <th class="text-center">% Org</th>
-                        <th class="text-right">Original Budget (A)<br>USD</th>
+                        <th class="text-right">Original Budget<br>(A)</th>
                         <th class="text-center">% Cur</th>
-                        <th class="text-right">Current Budget (B)<br>USD</th>
-                        <th class="text-right">Actual Received (C)<br>USD</th>
+                        <th class="text-right">Current Budget<br>(B)</th>
+                        <th class="text-right">Actual Received<br>(C)</th>
                         <th class="text-center">% Received</th>
                     </tr>
                 </thead>
@@ -1150,59 +1249,144 @@
         </div>
     </div>
     <script>
-        // Chart data for 9 categories
+        // Chart data for 11 categories with detailed budget info
         const chartData = [
-            { id: 'chart1', consumed: 80, color: '#3b82f6' },
-            { id: 'chart2', consumed: 80, color: '#10b981' },
-            { id: 'chart3', consumed: 0, color: '#ef4444' },
-            { id: 'chart4', consumed: 0, color: '#f59e0b' },
-            { id: 'chart5', consumed: 0, color: '#8b5cf6' },
-            { id: 'chart6', consumed: 0, color: '#06b6d4' },
-            { id: 'chart7', consumed: 0, color: '#14b8a6' },
-            { id: 'chart8', consumed: 0, color: '#ec4899' },
-            { id: 'chart9', consumed: 0, color: '#6b7280' }
+            { id: 'chart1', actual: 30000, committed: 50000, available: 20000, cpi: 1.00, title: 'Subcontractor' },
+            { id: 'chart2', actual: 30000, committed: 50000, available: 20000, cpi: 0.91, title: 'Mob / Demobilisation' },
+            { id: 'chart3', actual: 0, committed: 0, available: 50000, cpi: 1.00, title: 'Charter Hire' },
+            { id: 'chart4', actual: 0, committed: 0, available: 50000, cpi: 1.00, title: 'Consumables' },
+            { id: 'chart5', actual: 0, committed: 0, available: 10000, cpi: 1.00, title: 'Recharged' },
+            { id: 'chart6', actual: 0, committed: 0, available: 10000, cpi: 1.00, title: 'Other Project Cost' },
+            { id: 'chart7', actual: 0, committed: 0, available: 10000, cpi: 1.00, title: 'Catering & Bunks' },
+            { id: 'chart8', actual: 0, committed: 0, available: 1000, cpi: 1.00, title: 'Port Due' },
+            { id: 'chart9', actual: 0, committed: 0, available: 1000, cpi: 1.00, title: 'Freight Expenses' },
+            { id: 'chart10', actual: 50000, committed: 0, available: 100000, cpi: 0.97, title: 'Vessel' },
+            { id: 'chart11', actual: 50000, committed: 0, available: 50000, cpi: 1.00, title: 'Overhead' }
         ];
-        function drawDonutChart(canvasId, consumedPercent, consumedColor) {
+
+        function getCPIColor(cpi) {
+            if (cpi >= 1.00) return '#10b981'; // Green
+            if (cpi >= 0.95) return '#f59e0b'; // Yellow
+            return '#ef4444'; // Red
+        }
+
+        function formatCurrency(value) {
+            return '$' + value.toLocaleString('en-US');
+        }
+
+        function drawDonutChart(canvasId, actual, committed, available, cpi) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            canvas.width = 120;
-            canvas.height = 120;
+            canvas.width = 130;
+            canvas.height = 130;
+
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const radius = 45;
-            const lineWidth = 20;
+            const radius = 50;
+            const lineWidth = 18;
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Background circle
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = '#e5e7eb';
-            ctx.stroke();
-            // Consumed arc
-            if (consumedPercent > 0) {
-                const consumedAngle = (consumedPercent / 100) * 2 * Math.PI;
+
+            // Calculate angles
+            const total = actual + committed + available;
+            let startAngle = -Math.PI / 2;
+
+            // Draw Actual (Dark Blue)
+            if (actual > 0) {
+                const actualAngle = (actual / total) * 2 * Math.PI;
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + consumedAngle);
-                ctx.strokeStyle = consumedColor;
+                ctx.arc(centerX, centerY, radius, startAngle, startAngle + actualAngle);
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = '#1e40af';
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                startAngle += actualAngle;
+            }
+
+            // Draw Committed (Light Blue)
+            if (committed > 0) {
+                const committedAngle = (committed / total) * 2 * Math.PI;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, startAngle, startAngle + committedAngle);
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = '#60a5fa';
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                startAngle += committedAngle;
+            }
+
+            // Draw Available (Gray)
+            if (available > 0) {
+                const availableAngle = (available / total) * 2 * Math.PI;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, startAngle, startAngle + availableAngle);
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = '#9ca3af';
                 ctx.lineCap = 'round';
                 ctx.stroke();
             }
-            // Center text
-            ctx.fillStyle = '#1e3a8a';
-            ctx.font = 'bold 20px Arial';
+
+            // Draw CPI text in center with color
+            const cpiColor = getCPIColor(cpi);
+            
+            // Draw "CPI" label
+            ctx.fillStyle = '#6b7280';
+            ctx.font = 'bold 11px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(consumedPercent + '%', centerX, centerY - 7);
-            ctx.font = '11px Arial';
-            ctx.fillStyle = '#6b7280';
-            ctx.fillText('Used', centerX, centerY + 10);
+            ctx.fillText('CPI', centerX, centerY - 10);
+            
+            // Draw CPI value with color
+            ctx.fillStyle = cpiColor;
+            ctx.font = 'bold 18px Arial';
+            ctx.fillText(cpi.toFixed(2), centerX, centerY + 10);
         }
+
         function initAllCharts() {
             chartData.forEach(chart => {
-                drawDonutChart(chart.id, chart.consumed, chart.color);
+                drawDonutChart(chart.id, chart.actual, chart.committed, chart.available, chart.cpi);
             });
         }
+
+        // Tooltip functionality
+        const tooltip = document.getElementById('chartTooltip');
+        const tooltipTitle = document.getElementById('tooltipTitle');
+        const tooltipActual = document.getElementById('tooltipActual');
+        const tooltipCommitted = document.getElementById('tooltipCommitted');
+        const tooltipAvailable = document.getElementById('tooltipAvailable');
+
+        document.querySelectorAll('.chart-canvas-wrapper').forEach(wrapper => {
+            wrapper.addEventListener('click', function(e) {
+                const chartIndex = parseInt(this.getAttribute('data-chart')) - 1;
+                const data = chartData[chartIndex];
+                
+                // Update tooltip content
+                tooltipTitle.textContent = data.title;
+                tooltipActual.textContent = formatCurrency(data.actual);
+                tooltipCommitted.textContent = formatCurrency(data.committed);
+                tooltipAvailable.textContent = formatCurrency(data.available);
+                
+                // Position tooltip
+                const rect = this.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                
+                tooltip.style.left = (rect.left + scrollLeft + rect.width / 2 - 90) + 'px';
+                tooltip.style.top = (rect.top + scrollTop - 120) + 'px';
+                
+                // Show tooltip
+                tooltip.classList.add('show');
+            });
+        });
+
+        // Hide tooltip when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.chart-canvas-wrapper')) {
+                tooltip.classList.remove('show');
+            }
+        });
+
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
